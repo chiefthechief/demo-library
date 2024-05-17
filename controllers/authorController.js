@@ -93,6 +93,7 @@ let author_create_post = [
    },
 ];
 let author_delete_get = (req, res, next) => {
+   console.log(req.params)
    async.parallel({
       author(callback) {
          Author.findById(req.params.id).exec(callback);
@@ -102,6 +103,7 @@ let author_delete_get = (req, res, next) => {
       },
    },
       (err, results) => {
+         console.log(results)
          if (err) {
             return next(err);
          }
@@ -111,7 +113,7 @@ let author_delete_get = (req, res, next) => {
          res.render("author_delete", {
             title: "Delete Author",
             author: results.author,
-            author_books: results.author_books,
+            author_books: results.authors_books,
          })
       }
    )
@@ -123,7 +125,7 @@ let author_delete_post = (req, res, next) => {
             Author.findById(req.body.authorid).exec(callback);
          },
          authors_books(callback) {
-            Book.find({ author: req.body.authorid }).exec(callbcak);
+            Book.find({ author: req.body.authorid }).exec(callback);
          },
       },
       (err, results) => {

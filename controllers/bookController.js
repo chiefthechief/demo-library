@@ -4,6 +4,7 @@ const Genre = require("../models/genre");
 const BookInstance = require("../models/bookinstance");
 const async = require("async");
 const { body, validationResult } = require("express-validator");
+const bookinstance = require("../models/bookinstance");
 
 exports.index = (req, res) => {
    async.parallel({
@@ -93,7 +94,7 @@ exports.book_create_get = (req, res, next) => {
 exports.book_create_post = [
    (req, res, next) => {
       if (!Array.isArray(req.body.genre)) {
-         req.body.genre = typeof req.bodyo.genre === "undefined" ? [] : [req.body.genre];
+         req.body.genre = typeof req.body.genre === "undefined" ? [] : [req.body.genre];
       }
       next();
    },
@@ -122,7 +123,7 @@ exports.book_create_post = [
          author: req.body.author,
          summary: req.body.summary,
          isbn: req.body.isbn,
-         genre: req.bodoy.genre,
+         genre: req.body.genre,
       });
       if (!errors.isEmpty()) {
          async.parallel({
@@ -162,10 +163,49 @@ exports.book_create_post = [
    }
 ]
 exports.book_delete_get = (req, res, next) => {
-   res.send("NOT IMPLEMENTED: Book delete GET");
+   async.parallel(
+      {
+         book(callback) {
+            Book.findById(req.params.id).exec(callback)
+         },
+         bookinstance(callback) {
+            BookInstance.find({ book: req.params.id }).exec(callback)
+         }
+      },
+      (err, results) => {
+         if (err) {
+            return next(err)
+         }
+         if (results.book == null) {
+            res.redirect("/catalog/books")
+         }
+         res.render("book_delete", {
+            title: "Delete Book",
+            book: results.book,
+            bookinstances: results.bookinstance
+         })
+      }
+   )
 };
 exports.book_delete_post = (req, res) => {
-   res.send("NOT IMPLEMENTED: Book update GET");
+   async.parallel(
+      {
+         book(callback) {
+            Book.findById(req.body.bookinstance).exec(callback)
+         }
+      },
+      (err, results) => {
+         if (err) {
+            return next(err)
+         }
+         Book.findByIdAndRemove(req.body.bookinstance, (err) => {
+            if (err) {
+               return next(err)
+            }
+            res.redirect("/catalog/books")
+         })
+      }
+   )
 };
 exports.book_update_get = (req, res, next) => {
    async.parallel(

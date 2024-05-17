@@ -1,19 +1,18 @@
 extends layout
 block content
-   h1 #{title}: #{author.name}
-   p= author.lifespan
-   if author_books.length
-      p #[strong Delete the following books before attempting to delete this author.]
-      div(style="margin-left:20px; margin-top:20px")
-         h4 Books
+   h1 #{title}: #{book.title}
+   if bookinstances.length > 0
+      p #[strong Delete the following book instances before deleting this book]
+      div 
+         h4 Book Instances 
          dl
-            each book in author_books
-               dt
-                  a(href=book.url) #{book.title}
-               dd #{book.summary}
-   else
-      p Do you really want to delete this author?
+            each bookinstance in bookinstances 
+               dt 
+                  a(href=bookinstance.url) #{book.title}, #{bookinstance.id}
+   else 
+      p Do you really want to delete this book?
       form(method="POST" action="")
          div.form-group
-            input#authorid.form-control(type="hidden", name="authorid", required="true", value=author._id)
+            input#bookinstance.form-control(type="hidden", name="bookinstance",
+            required="true", value=book._id)
          button.btn.btn-primary(type="submit") Delete

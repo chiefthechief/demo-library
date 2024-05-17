@@ -75,7 +75,7 @@ genre_create_post = [body("name", "Genre name required").trim().isLength({ min: 
    }
 ]
 genre_delete_get = (req, res) => {
-   res.send("NOT IMPLEMENTED: Genre delete GET");
+   res.render("genre_delete", {title: "Delete Genre"});
 };
 genre_delete_post = (req, res) => {
    res.send("NOT IMPLEMENTED: Genre update GET");

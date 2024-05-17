@@ -93,7 +93,6 @@ let author_create_post = [
    },
 ];
 let author_delete_get = (req, res, next) => {
-   console.log(req.params)
    async.parallel({
       author(callback) {
          Author.findById(req.params.id).exec(callback);

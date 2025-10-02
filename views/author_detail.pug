@@ -1,16 +1,41 @@
 extends layout
+
 block content
-   h1 Author: #{author.name}
-   p #{author.date_of_birth} - #{author.date_of_death}
-   div(style="margin-left:20px;margin-top:20px")
-      h4 Books
-      dl
-         each book in author_books
-            dt
-               a(href=book.url) #{book.title}
-            dd #{book.summary}
-         else
-            p This author has no books.
-   hr
-   p
-      a(href=author.url+"/delete") Delete Author 
+   h1 ✍️ #{author.name}
+   
+   div.card
+      div.card-header
+         h3 👤 Author Information
+      div.row
+         div.col-md-8
+            p
+               strong 📅 Born: 
+               | #{author.date_of_birth}
+            p
+               strong 💀 Died: 
+               | #{author.date_of_death || 'Still alive'}
+         div.col-md-4
+            div.card
+               div.card-header
+                  h4 🔧 Actions
+               a.btn.btn-secondary.mb-2(href=author.url+"/update") ✏️ Edit Author
+               br
+               a.btn.btn-danger(href=author.url+"/delete") 🗑️ Delete Author
+
+   div.card
+      div.card-header
+         h3 📚 Books by this Author
+      if author_books && author_books.length > 0
+         div.book-grid
+            each book in author_books
+               div.book-item
+                  h4.book-title
+                     a(href=book.url) #{book.title}
+                  p.book-author #{book.summary}
+                  div.mt-3
+                     a.btn.btn-primary(href=book.url) View Book
+      else
+         div.alert.alert-warning
+            strong ⚠️ No Books Found
+            p This author has no books in the library yet.
+            a.btn.btn-success(href="/catalog/book/create") ➕ Add New Book

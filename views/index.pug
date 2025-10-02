@@ -2,15 +2,47 @@ extends layout
 
 block content
   h1= title
-  p Welcome to #[em chief's LocalLibrary], a library that allows you to get information about books in the library, add and delete amongst other things.
-  h1 Dynamic content
+  
+  div.card
+    div.card-header
+      h3 📊 Library Overview
+    p Welcome to #[em Chief's Local Library], a modern digital library management system that allows you to browse, manage, and organize your book collection with ease.
+  
   if error
-    p Error getting dynamic content.
+    div.alert.alert-error
+      strong ⚠️ Error: 
+      | Unable to load library statistics. Please try again later.
   else
-    p The library has the following record:
-    ul
-      li #[strong Books:] !{data.book_count}
-      li #[strong Copies:] !{data.book_instance_count}
-      li #[strong Copies available:] !{data.book_instance_available_count}
-      li #[strong Authors:] !{data.author_count}
-      li #[strong Genres:] !{data.genre_count}
+    div.stats-grid
+      div.stat-card
+        div.stat-number !{data.book_count}
+        div.stat-label 📖 Total Books
+      
+      div.stat-card
+        div.stat-number !{data.book_instance_count}
+        div.stat-label 📚 Total Copies
+      
+      div.stat-card
+        div.stat-number !{data.book_instance_available_count}
+        div.stat-label ✅ Available Copies
+      
+      div.stat-card
+        div.stat-number !{data.author_count}
+        div.stat-label ✍️ Authors
+      
+      div.stat-card
+        div.stat-number !{data.genre_count}
+        div.stat-label 🏷️ Genres
+  
+  div.card
+    div.card-header
+      h3 🚀 Quick Actions
+    div.row
+      div.col-md-3
+        a.btn.btn-primary(href="/catalog/books") Browse All Books
+      div.col-md-3
+        a.btn.btn-primary(href="/catalog/authors") View Authors
+      div.col-md-3
+        a.btn.btn-success(href="/catalog/book/create") Add New Book
+      div.col-md-3
+        a.btn.btn-success(href="/catalog/author/create") Add New Author

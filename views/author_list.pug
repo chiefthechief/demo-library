@@ -1,10 +1,23 @@
 extends layout
+
 block content
    h1= title
-   ul
-      each author in author_list
-         li
-            a(href=author.url) #{author.name}
-            |  (#{author.date_of_birth} - #{author.date_of_death})
-      else
-         li There are no authors.
+   
+   if author_list && author_list.length > 0
+      div.book-grid
+         each author in author_list
+            div.book-item
+               h3.book-title
+                  a(href=author.url) ✍️ #{author.name}
+               p.book-author
+                  strong 📅 Lifespan: 
+                  | #{author.date_of_birth} - #{author.date_of_death}
+               div.mt-3
+                  a.btn.btn-primary(href=author.url) View Profile
+   else
+      div.card
+         div.card-header
+            h3 ✍️ No Authors Found
+         p No authors are currently registered in the library.
+         p
+            a.btn.btn-success(href="/catalog/author/create") Add the first author!

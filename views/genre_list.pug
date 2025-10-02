@@ -1,9 +1,20 @@
 extends layout
+
 block content
    h1= title
-   ul
-      each genre in genre_list
-         li
-            a(href= genre.url) #{genre.name}
-      else
-         li There are no genres.
+   
+   if genre_list && genre_list.length > 0
+      div.book-grid
+         each genre in genre_list
+            div.book-item
+               h3.book-title
+                  a(href=genre.url) 🏷️ #{genre.name}
+               div.mt-3
+                  a.btn.btn-primary(href=genre.url) View Books
+   else
+      div.card
+         div.card-header
+            h3 🏷️ No Genres Found
+         p No genres are currently available in the library.
+         p
+            a.btn.btn-success(href="/catalog/genre/create") Add the first genre!

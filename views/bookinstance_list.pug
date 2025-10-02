@@ -1,17 +1,34 @@
 extends layout
+
 block content
    h1= title
-   ul
-      each val in bookinstance_list
-         li
-            a(href=val.url) #{val.book.title}: #{val.imprint} - 
-            if val.status== "Available"
-               span.text-success #{val.status}
-            else if val.status== "Maintenance"
-               span.text-danger #{val.status}
-            else
-               span.text-warning #{val.status}
-            if val.status!= "Available"
-               span (Due: #{val.due_back_formatted})
-            else
-               li There are no book copies in this library.
+   
+   if bookinstance_list && bookinstance_list.length > 0
+      div.book-grid
+         each val in bookinstance_list
+            div.book-item
+               h4.book-title
+                  a(href=val.url) 📚 #{val.book.title}
+               p.book-author
+                  strong 🏢 Imprint: 
+                  | #{val.imprint}
+               div.mt-2
+                  if val.status== "Available"
+                     span.status-available ✅ #{val.status}
+                  else if val.status== "Maintenance"
+                     span.status-maintenance 🔧 #{val.status}
+                  else
+                     span.status-loaned 📅 #{val.status}
+               if val.status!= "Available"
+                  p.mt-2
+                     strong 📅 Due: 
+                     | #{val.due_back_formatted}
+               div.mt-3
+                  a.btn.btn-primary(href=val.url) View Details
+   else
+      div.card
+         div.card-header
+            h3 📚 No Book Instances Found
+         p No book copies are currently available in the library.
+         p
+            a.btn.btn-success(href="/catalog/bookinstance/create") Add the first book copy!

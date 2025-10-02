@@ -1,9 +1,23 @@
 extends layout
+
 block content
     h1= title
-    ul
-        each book in book_list
-            li
-                a(href=book.url) #{book.title} (#{book.author_name})
-        else
-            li There are no books.
+    
+    if book_list && book_list.length > 0
+        div.book-grid
+            each book in book_list
+                div.book-item
+                    h3.book-title
+                        a(href=book.url) #{book.title}
+                    p.book-author 
+                        strong Author: 
+                        | #{book.author_name}
+                    div.mt-3
+                        a.btn.btn-primary(href=book.url) View Details
+    else
+        div.card
+            div.card-header
+                h3 📚 No Books Found
+            p No books are currently available in the library. 
+            p 
+                a.btn.btn-success(href="/catalog/book/create") Add the first book to get started!

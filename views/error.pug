@@ -1,6 +1,18 @@
 extends layout
 
 block content
-  h1= message
-  h2= error.status
-  pre #{error.stack}
+  div.card
+    div.card-header
+      h1 ⚠️ Error #{error.status}
+    div.alert.alert-error
+      h2= message
+      p Something went wrong while processing your request.
+    
+    if error.stack
+      details
+        summary 🔍 Technical Details (Click to expand)
+        pre.mt-3(style="background: #f8f9fa; padding: 1rem; border-radius: 4px; font-size: 0.8rem;") #{error.stack}
+    
+    div.mt-4
+      a.btn.btn-primary(href="/catalog") 🏠 Return to Home
+      a.btn.btn-secondary(href="javascript:history.back()") ← Go Back

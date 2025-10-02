@@ -3,41 +3,54 @@ extends layout
 block content
   h1= title
 
-  form(method='POST')
-    div.form-group
-      label(for='title') Title:
-      input#title.form-control(type='text', placeholder='Name of book' name='title' required value=(undefined===book ? '' : book.title) )
-    div.form-group
-      label(for='author') Author:
-      select#author.form-control(name='author' required)
-        option(value='') --Please select an author--
-        for author in authors
-          if book
-            if author._id.toString()===book.author._id.toString()
-              option(value=author._id selected) #{author.name}
+  div.card
+    div.card-header
+      h3 📝 Book Information
+    
+    form(method='POST')
+      div.form-group
+        label(for='title') 📖 Title:
+        input#title(type='text', placeholder='Enter book title' name='title' required value=(undefined===book ? '' : book.title))
+      
+      div.form-group
+        label(for='author') ✍️ Author:
+        select#author(name='author' required)
+          option(value='') --Please select an author--
+          for author in authors
+            if book
+              if author._id.toString()===book.author._id.toString()
+                option(value=author._id selected) #{author.name}
+              else
+                option(value=author._id) #{author.name}
             else
               option(value=author._id) #{author.name}
-          else
-            option(value=author._id) #{author.name}
-    div.form-group
-      label(for='summary') Summary:
-      textarea#summary.form-control(placeholder='Summary' name='summary' required)= undefined===book ? '' : book.summary
-    div.form-group
-      label(for='isbn') ISBN:
-      input#isbn.form-control(type='text', placeholder='ISBN13' name='isbn' value=(undefined===book ? '' : book.isbn) required)
-    div.form-group
-      label Genre:
-      div
-        for genre in genres
-          div(style='display: inline; padding-right:10px;')
-            if genre.checked
-              input.checkbox-input(type='checkbox', name='genre', id=genre._id, value=genre._id, checked)
-            else
-              input.checkbox-input(type='checkbox', name='genre', id=genre._id, value=genre._id)
-            label(for=genre._id) &nbsp;#{genre.name}
-    button.btn.btn-primary(type='submit') Submit
+      
+      div.form-group
+        label(for='summary') 📝 Summary:
+        textarea#summary(placeholder='Enter book summary' name='summary' required rows='4')= undefined===book ? '' : book.summary
+      
+      div.form-group
+        label(for='isbn') 📚 ISBN:
+        input#isbn(type='text', placeholder='Enter ISBN (e.g., 978-0123456789)' name='isbn' value=(undefined===book ? '' : book.isbn) required)
+      
+      div.form-group
+        label 🏷️ Genres:
+        div.genre-checkboxes
+          for genre in genres
+            div.checkbox-item
+              if genre.checked
+                input.checkbox-input(type='checkbox', name='genre', id=genre._id, value=genre._id, checked)
+              else
+                input.checkbox-input(type='checkbox', name='genre', id=genre._id, value=genre._id)
+              label.checkbox-label(for=genre._id) #{genre.name}
+      
+      div.form-actions
+        button.btn.btn-primary(type='submit') 💾 Save Book
+        a.btn.btn-secondary(href='/catalog/books') ❌ Cancel
 
-  if errors
-    ul
-      for error in errors
-        li!= error.msg
+  if errors && errors.length > 0
+    div.alert.alert-error
+      strong ⚠️ Please fix the following errors:
+      ul
+        for error in errors
+          li= error.msg

@@ -11,7 +11,7 @@ block content
                         a(href=book.url) #{book.title}
                     p.book-author 
                         strong Author: 
-                        | #{book.author_name}
+                        | #{book.author.name}
                     div.mt-3
                         a.btn.btn-primary(href=book.url) View Details
     else
